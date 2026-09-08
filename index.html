@@ -11,7 +11,6 @@
             --bg-color: #050506;
             --panel-bg: rgba(15, 15, 18, 0.4);
             --accent-red: #ff2a2a;
-            --accent-glow: rgba(255, 42, 42, 0.4);
             --text-main: #f4f4f5;
             --text-muted: #8a8a93;
             --border-color: rgba(255, 255, 255, 0.06);
@@ -31,7 +30,7 @@
             position: relative;
         }
 
-        /* Animated Grid Background */
+        /* Animated Grid */
         .bg-grid {
             position: fixed;
             top: 0; left: 0; width: 200vw; height: 200vh;
@@ -41,7 +40,7 @@
             background-size: 40px 40px;
             transform: perspective(500px) rotateX(60deg) translateY(-100px) translateZ(-200px);
             animation: gridMove 20s linear infinite;
-            z-index: -1;
+            z-index: -2;
             pointer-events: none;
         }
 
@@ -52,40 +51,46 @@
 
         /* Ambient Glows */
         .glow-red {
-            position: fixed;
-            top: 20%; left: 30%;
+            position: fixed; top: 20%; left: 30%;
             width: 400px; height: 400px;
             background: radial-gradient(circle, rgba(255, 42, 42, 0.05) 0%, transparent 70%);
-            z-index: -1; filter: blur(50px);
+            z-index: -2; filter: blur(50px);
+            animation: pulse-glow 8s ease-in-out infinite alternate;
         }
         
         .glow-purple {
-            position: fixed;
-            bottom: 20%; right: 30%;
+            position: fixed; bottom: 20%; right: 30%;
             width: 500px; height: 500px;
             background: radial-gradient(circle, rgba(90, 40, 220, 0.05) 0%, transparent 70%);
-            z-index: -1; filter: blur(50px);
+            z-index: -2; filter: blur(50px);
+            animation: pulse-glow 10s ease-in-out infinite alternate-reverse;
+        }
+
+        @keyframes pulse-glow {
+            0% { opacity: 0.5; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Floating Particles Container */
+        #particles {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; pointer-events: none;
         }
 
         .container {
-            max-width: 1200px;
-            width: 100%;
+            max-width: 1200px; width: 100%;
             padding: 8vh 2rem 5rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            flex: 1;
-            z-index: 10;
+            display: flex; flex-direction: column; align-items: center;
+            flex: 1; z-index: 10;
         }
 
+        /* Badge Alpha */
         .badge {
             background: rgba(255, 42, 42, 0.08);
             color: var(--accent-red);
             font-family: 'JetBrains Mono', monospace;
-            padding: 0.4rem 1.2rem;
-            border-radius: 100px;
-            font-size: 0.8rem;
-            letter-spacing: 2px;
+            padding: 0.4rem 1.2rem; border-radius: 100px;
+            font-size: 0.8rem; letter-spacing: 2px;
             border: 1px solid rgba(255, 42, 42, 0.2);
             margin-bottom: 2rem;
             box-shadow: 0 0 15px rgba(255, 42, 42, 0.1);
@@ -93,243 +98,160 @@
         }
 
         @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-5px); }
-            100% { transform: translateY(0px); }
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
         }
 
         h1 {
-            font-size: clamp(4rem, 8vw, 6rem);
-            font-weight: 800;
-            letter-spacing: -3px;
-            margin-bottom: 1rem;
+            font-size: clamp(4rem, 8vw, 6rem); font-weight: 800;
+            letter-spacing: -3px; margin-bottom: 1rem;
             background: linear-gradient(180deg, #fff 0%, #777 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
-        .subtitle-container {
-            height: 2rem;
-            margin-bottom: 3rem;
-        }
-
+        .subtitle-container { height: 2rem; margin-bottom: 3rem; }
         .subtitle {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 1.1rem;
-            color: var(--text-muted);
+            font-size: 1.1rem; color: var(--text-muted);
         }
-
         .cursor {
-            display: inline-block;
-            width: 8px; height: 1.2em;
-            background-color: var(--text-muted);
-            vertical-align: middle;
+            display: inline-block; width: 8px; height: 1.2em;
+            background-color: var(--text-muted); vertical-align: middle;
             animation: blink 1s step-end infinite;
         }
         @keyframes blink { 50% { opacity: 0; } }
 
-        /* Premium Discord Button */
-        .discord-btn-wrapper {
-            position: relative;
-            margin-bottom: 4rem;
-        }
-
+        /* Discord Button */
+        .discord-btn-wrapper { position: relative; margin-bottom: 4rem; z-index: 20; }
         .discord-btn-wrapper::before {
-            content: '';
-            position: absolute;
+            content: ''; position: absolute;
             top: -2px; left: -2px; right: -2px; bottom: -2px;
             background: linear-gradient(45deg, #ff2a2a, #5a28dc, #ff2a2a);
-            border-radius: 8px;
-            z-index: -1;
-            filter: blur(10px);
-            opacity: 0.3;
-            animation: pulse-glow 3s linear infinite;
+            border-radius: 8px; z-index: -1; filter: blur(10px);
+            opacity: 0.4; animation: pulse-border 3s linear infinite;
             transition: opacity 0.3s ease;
         }
+        .discord-btn-wrapper:hover::before { opacity: 0.9; }
 
-        .discord-btn-wrapper:hover::before { opacity: 0.8; }
-
-        @keyframes pulse-glow {
+        @keyframes pulse-border {
             0% { filter: blur(10px); }
-            50% { filter: blur(15px); }
+            50% { filter: blur(16px); }
             100% { filter: blur(10px); }
         }
 
         .btn {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: rgba(10, 10, 12, 0.8);
-            color: white;
-            text-decoration: none;
-            padding: 1rem 3rem;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 1.1rem;
+            display: flex; align-items: center; gap: 10px;
+            background: rgba(10, 10, 12, 0.8); color: white;
+            text-decoration: none; padding: 1rem 3rem;
+            border-radius: 6px; font-weight: 600; font-size: 1.1rem;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
+            backdrop-filter: blur(10px); transition: all 0.3s ease;
         }
-
         .btn:hover {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
         }
 
-        /* FAKE IDE WINDOW (Script Showcase) */
+        /* IDE Window */
         .ide-window {
-            width: 100%;
-            max-width: 800px;
+            width: 100%; max-width: 800px;
             background: rgba(10, 10, 12, 0.6);
             border: 1px solid var(--border-color);
-            border-radius: 12px;
-            backdrop-filter: blur(20px);
+            border-radius: 12px; backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            overflow: hidden;
-            margin-bottom: 4rem;
+            overflow: hidden; margin-bottom: 4rem;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            transform-style: preserve-3d;
-            perspective: 1000px;
+            transform-style: preserve-3d; transition: transform 0.1s ease;
         }
 
         .ide-header {
-            background: rgba(255, 255, 255, 0.03);
-            padding: 0.8rem 1rem;
-            display: flex;
-            align-items: center;
-            border-bottom: 1px solid var(--border-color);
+            background: rgba(255, 255, 255, 0.03); padding: 0.8rem 1rem;
+            display: flex; align-items: center; border-bottom: 1px solid var(--border-color);
         }
-
-        .ide-dots {
-            display: flex; gap: 8px;
-        }
-
-        .dot {
-            width: 12px; height: 12px; border-radius: 50%;
-        }
+        .ide-dots { display: flex; gap: 8px; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; }
         .dot.red { background: #ff5f56; }
         .dot.yellow { background: #ffbd2e; }
         .dot.green { background: #27c93f; }
-
         .ide-title {
             flex: 1; text-align: center;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.8rem; color: #666;
+            font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #666;
         }
 
         .ide-content {
-            padding: 1.5rem;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
-            line-height: 1.6;
-            color: #d4d4d4;
-            height: 180px;
-            overflow: hidden;
-            position: relative;
+            padding: 1.5rem; font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem; line-height: 1.6; color: #d4d4d4;
+            height: 220px; overflow-y: auto; overflow-x: hidden;
+            white-space: pre-wrap; word-wrap: break-word;
         }
 
-        .ide-content .keyword { color: #569cd6; }
-        .ide-content .string { color: #ce9178; }
-        .ide-content .comment { color: #6a9955; font-style: italic; }
-        .ide-content .function { color: #dcdcaa; }
+        /* Syntax Highlighting Classes */
+        .keyword { color: #c586c0; font-weight: bold; }
+        .string { color: #ce9178; }
+        .comment { color: #6a9955; font-style: italic; }
+        .function { color: #dcdcaa; }
+        .global { color: #4ec9b0; }
 
-        /* 4-GRID LAYOUT */
+        /* 4-GRID Cards */
         .grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1.5rem;
-            width: 100%;
-            max-width: 1000px;
+            display: grid; grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem; width: 100%; max-width: 1000px; perspective: 1000px;
         }
-
-        @media (max-width: 768px) {
-            .grid { grid-template-columns: 1fr; }
-        }
+        @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
 
         .card {
-            background: var(--panel-bg);
-            border: 1px solid var(--border-color);
-            padding: 2.5rem 2rem;
-            border-radius: 12px;
-            backdrop-filter: blur(12px);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
+            background: var(--panel-bg); border: 1px solid var(--border-color);
+            padding: 2.5rem 2rem; border-radius: 12px;
+            backdrop-filter: blur(12px); transform-style: preserve-3d;
+            transition: border-color 0.4s ease, box-shadow 0.4s ease, background 0.4s ease;
+            position: relative; overflow: hidden; cursor: pointer;
         }
-
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, rgba(255,42,42,0.1) 0%, transparent 100%);
-            opacity: 0; transition: opacity 0.4s ease;
+        
+        .card-content {
+            transform: translateZ(30px); pointer-events: none;
         }
 
         .card:hover {
-            transform: translateY(-8px) scale(1.02);
             border-color: rgba(255, 42, 42, 0.3);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 42, 42, 0.1);
         }
-
-        .card:hover::before { opacity: 1; }
 
         .card-number {
-            position: absolute;
-            top: -10px; right: 10px;
-            font-size: 6rem;
-            font-weight: 800;
-            color: rgba(255, 255, 255, 0.02);
-            font-family: 'JetBrains Mono', monospace;
-            pointer-events: none;
-            transition: color 0.4s ease;
+            position: absolute; top: -10px; right: 10px;
+            font-size: 6rem; font-weight: 800; color: rgba(255, 255, 255, 0.02);
+            font-family: 'JetBrains Mono', monospace; transition: color 0.4s ease;
+            z-index: 0;
         }
-
         .card:hover .card-number { color: rgba(255, 42, 42, 0.05); }
 
         .card h3 { 
-            font-size: 1.3rem; 
-            margin-bottom: 0.8rem; 
-            color: #fff;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            font-size: 1.3rem; margin-bottom: 0.8rem; color: #fff;
+            display: flex; align-items: center; gap: 10px; position: relative; z-index: 1;
         }
-
         .card h3::before {
-            content: '';
-            display: inline-block;
-            width: 8px; height: 8px;
-            background: var(--accent-red);
-            border-radius: 50%;
+            content: ''; display: inline-block; width: 8px; height: 8px;
+            background: var(--accent-red); border-radius: 50%;
             box-shadow: 0 0 10px var(--accent-red);
         }
-
         .card p { 
-            color: var(--text-muted); 
-            font-size: 0.95rem; 
-            line-height: 1.6; 
-            position: relative;
-            z-index: 2;
+            color: var(--text-muted); font-size: 0.95rem; 
+            line-height: 1.6; position: relative; z-index: 1;
         }
 
         footer {
-            width: 100%;
-            padding: 2rem;
-            text-align: center;
+            width: 100%; padding: 2rem; text-align: center;
             border-top: 1px solid var(--border-color);
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.85rem;
-            color: #555;
-            margin-top: auto;
+            font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;
+            color: #555; margin-top: auto; z-index: 10;
         }
-
         footer span { color: #888; font-weight: bold; }
     </style>
 </head>
 <body>
 
+    <div id="particles"></div>
     <div class="bg-grid"></div>
     <div class="glow-red"></div>
     <div class="glow-purple"></div>
@@ -344,7 +266,6 @@
         
         <div class="discord-btn-wrapper">
             <a href="https://discord.gg/dYAnYbvqgt" class="btn" target="_blank">
-                <!-- SVG Discord Icon -->
                 <svg width="24" height="24" viewBox="0 0 127.14 96.36" fill="currentColor">
                     <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a67.58,67.58,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.31,60,73.31,53s5-12.74,11.43-12.74S96.2,46,96.12,53,91.08,65.69,84.69,65.69Z"/>
                 </svg>
@@ -360,34 +281,40 @@
                     <div class="dot yellow"></div>
                     <div class="dot green"></div>
                 </div>
-                <div class="ide-title">workspace/seven/auto_inject.lua</div>
+                <div class="ide-title" id="ideTitle">workspace/seven/inject.lua</div>
             </div>
-            <div class="ide-content" id="ideCode">
-                <!-- Code is injected via JS -->
-            </div>
+            <div class="ide-content" id="ideCode"></div>
         </div>
 
-        <!-- 4 Features Grid -->
+        <!-- Features Grid -->
         <div class="grid">
             <div class="card">
                 <div class="card-number">01</div>
-                <h3>Discret Execution</h3>
-                <p>Operates entirely in the shadows. No traces left behind, no suspicious logs in the developer console. True stealth engineering.</p>
+                <div class="card-content">
+                    <h3>Discret Execution</h3>
+                    <p>Operates entirely in the shadows. No traces left behind, no suspicious logs in the developer console. True stealth engineering.</p>
+                </div>
             </div>
             <div class="card">
                 <div class="card-number">02</div>
-                <h3>Safest Standard</h3>
-                <p>Built from the ground up with top-tier security protocols. Your client stability and account safety are our absolute priorities.</p>
+                <div class="card-content">
+                    <h3>Safest Standard</h3>
+                    <p>Built from the ground up with top-tier security protocols. Your client stability and account safety are our absolute priorities.</p>
+                </div>
             </div>
             <div class="card">
                 <div class="card-number">03</div>
-                <h3>Custom ScriptHub</h3>
-                <p>Comes pre-loaded with our exclusive, hand-crafted scripts. Instant access to the best tools without spending hours searching online.</p>
+                <div class="card-content">
+                    <h3>Custom ScriptHub</h3>
+                    <p>Comes pre-loaded with our exclusive, hand-crafted scripts. Instant access to the best tools without spending hours searching online.</p>
+                </div>
             </div>
             <div class="card">
                 <div class="card-number">04</div>
-                <h3>No BS Key System</h3>
-                <p>We respect your time. Forget about annoying link shorteners, endless pop-ups, and daily keys. Open, inject, and execute instantly.</p>
+                <div class="card-content">
+                    <h3>No BS Key System</h3>
+                    <p>We respect your time. Forget about annoying link shorteners, endless pop-ups, and daily keys. Open, inject, and execute instantly.</p>
+                </div>
             </div>
         </div>
     </div>
@@ -397,7 +324,36 @@
     </footer>
 
     <script>
-        // 1. Typewriter Subtitle
+        // 1. Particle System (Creates floating dust)
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for(let i = 0; i < 40; i++) {
+                let div = document.createElement('div');
+                div.style.position = 'absolute';
+                div.style.width = Math.random() * 3 + 'px';
+                div.style.height = div.style.width;
+                div.style.background = 'rgba(255, 255, 255, 0.15)';
+                div.style.borderRadius = '50%';
+                div.style.left = Math.random() * 100 + 'vw';
+                div.style.top = Math.random() * 100 + 'vh';
+                div.style.boxShadow = '0 0 10px rgba(255,255,255,0.1)';
+                
+                let duration = Math.random() * 10 + 10;
+                div.animate([
+                    { transform: `translate(0, 0) scale(1)`, opacity: 0 },
+                    { transform: `translate(${Math.random() * 100 - 50}px, -100px) scale(1.5)`, opacity: 1, offset: 0.5 },
+                    { transform: `translate(${Math.random() * 200 - 100}px, -200px) scale(1)`, opacity: 0 }
+                ], {
+                    duration: duration * 1000,
+                    iterations: Infinity,
+                    delay: Math.random() * 5000
+                });
+                container.appendChild(div);
+            }
+        }
+        createParticles();
+
+        // 2. Typewriter Subtitle
         const textToType = "Upcoming wonderful executor.";
         const typeWriterElement = document.getElementById('typewriter');
         let i = 0;
@@ -410,82 +366,101 @@
         }
         setTimeout(typeWriter, 800);
 
-        // 2. FAKE IDE SCRIPTING ANIMATION (Live Code Typing)
-        const codeLines = [
-            '<span class="comment">-- Initializing SEVEN Core Engine...</span>',
-            '<span class="keyword">local</span> player = game.<span class="function">GetService</span>(<span class="string">"Players"</span>).LocalPlayer',
-            '<span class="keyword">local</span> bypass = <span class="keyword">require</span>(<span class="string">"seven/modules/bypass"</span>)',
-            '',
-            '<span class="comment">-- Hooking metatables for stealth</span>',
-            '<span class="function">print</span>(<span class="string">"[SEVEN] Bypassing Anti-Cheat..."</span>)',
-            'bypass:<span class="function">InitStealthMode</span>()',
-            '',
-            '<span class="function">task.wait</span>(0.5)',
-            '<span class="keyword">if</span> player.Character <span class="keyword">then</span>',
-            '    <span class="function">print</span>(<span class="string">"[SEVEN] Successfully attached to "</span> .. player.Name)',
-            '<span class="keyword">end</span>'
+        // 3. FAKE IDE LOGIC (Letter by letter + Syntax Highlighting)
+        const scripts = [
+            {
+                name: "scripts/kill_part.lua",
+                code: "-- SEVEN Basic Kill Part\nlocal part = workspace.KillPart\n\npart.Touched:Connect(function(hit)\n    local hum = hit.Parent:FindFirstChild('Humanoid')\n    if hum then\n        hum.Health = 0\n        print('Target eliminated.')\n    end\nend)"
+            },
+            {
+                name: "scripts/simple_esp.lua",
+                code: "-- SEVEN Player Highlight Loop\nfor _, player in pairs(game.Players:GetPlayers()) do\n    if player ~= game.Players.LocalPlayer then\n        local highlight = Instance.new('Highlight')\n        highlight.FillColor = Color3.fromRGB(255, 0, 0)\n        highlight.Parent = player.Character\n    end\nend"
+            },
+            {
+                name: "core/bypass.lua",
+                code: "-- Hooking MetaMethods...\nlocal OldIndex\nOldIndex = hookmetamethod(game, '__index', function(self, key)\n    if not checkcaller() and key == 'WalkSpeed' then\n        return 16 -- Spoof value to AntiCheat\n    end\n    return OldIndex(self, key)\nend)\nprint('Bypass active.')"
+            }
         ];
 
         const ideContent = document.getElementById('ideCode');
-        let lineIndex = 0;
+        const ideTitle = document.getElementById('ideTitle');
 
-        function typeCodeLine() {
-            if (lineIndex < codeLines.length) {
-                // Append line with a subtle fade-in effect
-                const line = document.createElement('div');
-                line.innerHTML = codeLines[lineIndex] || '<br>'; // Handle empty lines
-                line.style.opacity = '0';
-                line.style.transform = 'translateY(5px)';
-                line.style.transition = 'all 0.2s ease';
-                
-                ideContent.appendChild(line);
-                
-                // Trigger reflow to start transition
-                setTimeout(() => {
-                    line.style.opacity = '1';
-                    line.style.transform = 'translateY(0)';
-                }, 10);
+        // Simple Regex Highlighter
+        function highlightSyntax(text) {
+            return text
+                .replace(/(--.*)/g, '<span class="comment">$1</span>') // Comments
+                .replace(/(local|function|if|then|end|for|in|do|return|not|and)/g, '<span class="keyword">$1</span>') // Keywords
+                .replace(/('.*?'|".*?")/g, '<span class="string">$1</span>') // Strings
+                .replace(/(print|Connect|FindFirstChild|Instance\.new|hookmetamethod|checkcaller|fromRGB)/g, '<span class="function">$1</span>') // Functions
+                .replace(/(workspace|game|Color3|math)/g, '<span class="global">$1</span>'); // Globals
+        }
 
-                // Scroll to bottom if needed
-                ideContent.scrollTop = ideContent.scrollHeight;
+        async function playScriptsLoop() {
+            while (true) {
+                // Pick random script
+                const randomScript = scripts[Math.floor(Math.random() * scripts.length)];
+                ideTitle.innerText = randomScript.name;
+                ideContent.innerHTML = "";
                 
-                lineIndex++;
-                setTimeout(typeCodeLine, Math.random() * 400 + 200); // Random delay between lines
-            } else {
-                // Loop the animation after a pause
-                setTimeout(() => {
-                    ideContent.innerHTML = '';
-                    lineIndex = 0;
-                    typeCodeLine();
-                }, 4000);
+                let currentRawText = "";
+                
+                // Type character by character
+                for (let j = 0; j < randomScript.code.length; j++) {
+                    currentRawText += randomScript.code[j];
+                    ideContent.innerHTML = highlightSyntax(currentRawText) + '<span class="cursor" style="height:1em; width:6px; background:#fff;"></span>';
+                    ideContent.scrollTop = ideContent.scrollHeight;
+                    
+                    // Delay (faster for spaces, random for letters)
+                    await new Promise(r => setTimeout(r, randomScript.code[j] === ' ' ? 10 : Math.random() * 40 + 10));
+                }
+                
+                // Remove cursor at the end
+                ideContent.innerHTML = highlightSyntax(currentRawText);
+                
+                // Wait 4 seconds, then clear and restart
+                await new Promise(r => setTimeout(r, 4000));
             }
         }
-        setTimeout(typeCodeLine, 2000); // Start IDE animation after 2s
+        
+        setTimeout(playScriptsLoop, 1500);
 
-        // 3. IDE 3D Mouse Tracking
-        const ideWindow = document.getElementById('ideWindow');
-        ideWindow.addEventListener('mousemove', (e) => {
-            const rect = ideWindow.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            
-            const rotateX = ((y - centerY) / centerY) * -4;
-            const rotateY = ((x - centerX) / centerX) * 4;
-            
-            ideWindow.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-        });
-        
-        ideWindow.addEventListener('mouseleave', () => {
-            ideWindow.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`;
-            ideWindow.style.transition = `transform 0.5s ease`;
-        });
-        
-        ideWindow.addEventListener('mouseenter', () => {
-            ideWindow.style.transition = `none`;
-        });
+        // 4. 3D Hover Tracking for IDE and Cards
+        function apply3DHover(elements) {
+            elements.forEach(el => {
+                el.addEventListener('mousemove', (e) => {
+                    const rect = el.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    
+                    const rotateX = ((y - centerY) / centerY) * -6;
+                    const rotateY = ((x - centerX) / centerX) * 6;
+                    
+                    el.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+                    
+                    if(el.classList.contains('card')) {
+                        el.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(255,42,42,0.06) 0%, var(--panel-bg) 60%)`;
+                    }
+                });
+                
+                el.addEventListener('mouseleave', () => {
+                    el.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+                    el.style.transition = `transform 0.5s ease, background 0.5s ease`;
+                    if(el.classList.contains('card')) {
+                        el.style.background = `var(--panel-bg)`;
+                    }
+                });
+                
+                el.addEventListener('mouseenter', () => {
+                    el.style.transition = `none`;
+                });
+            });
+        }
+
+        apply3DHover(document.querySelectorAll('.card'));
+        apply3DHover([document.getElementById('ideWindow')]);
     </script>
 </body>
 </html>
