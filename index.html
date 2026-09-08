@@ -3,163 +3,265 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEVEN | Upcoming Executor</title>
+    <title>SEVEN | Alpha</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@700&display=swap');
+
+        :root {
+            --bg-color: #070707;
+            --panel-bg: rgba(20, 20, 22, 0.6);
+            --accent-red: #ff3333;
+            --text-main: #f0f0f0;
+            --text-muted: #888888;
+            --border-color: rgba(255, 255, 255, 0.08);
+        }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
+
         body {
-            background-color: #050505;
-            color: #ffffff;
+            background-color: var(--bg-color);
+            color: var(--text-main);
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-height: 100vh;
-            /* Le fameux glow violet type Wave en fond */
-            background-image: radial-gradient(circle at 50% 30%, rgba(90, 40, 220, 0.12) 0%, transparent 60%);
+            position: relative;
+        }
+
+        /* Animated Grid Background */
+        .bg-grid {
+            position: fixed;
+            top: 0; left: 0; width: 200vw; height: 200vh;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            transform: perspective(500px) rotateX(60deg) translateY(-100px) translateZ(-200px);
+            animation: gridMove 20s linear infinite;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        @keyframes gridMove {
+            0% { transform: perspective(500px) rotateX(60deg) translateY(0) translateZ(-200px); }
+            100% { transform: perspective(500px) rotateX(60deg) translateY(50px) translateZ(-200px); }
+        }
+
+        /* Glow central */
+        .glow {
+            position: fixed;
+            top: 50%; left: 50%;
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(255, 51, 51, 0.08) 0%, transparent 70%);
+            transform: translate(-50%, -50%);
+            z-index: -1;
+            pointer-events: none;
         }
 
         .container {
-            max-width: 1000px;
+            max-width: 1100px;
             width: 100%;
-            padding: 5rem 2rem;
-            text-align: center;
-            flex: 1;
+            padding: 10vh 2rem 5rem;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            flex: 1;
         }
 
+        /* Badge Alpha */
         .badge {
-            display: inline-block;
-            background: rgba(255, 0, 0, 0.08);
-            color: #ff4444;
+            background: rgba(255, 51, 51, 0.1);
+            color: var(--accent-red);
             font-family: 'JetBrains Mono', monospace;
-            padding: 0.4rem 1rem;
+            padding: 0.5rem 1.2rem;
             border-radius: 4px;
             font-size: 0.85rem;
-            letter-spacing: 3px;
-            border: 1px solid rgba(255, 0, 0, 0.2);
+            letter-spacing: 4px;
+            border: 1px solid rgba(255, 51, 51, 0.3);
             margin-bottom: 2rem;
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.1);
+            box-shadow: 0 0 20px rgba(255, 51, 51, 0.15);
+            opacity: 0;
+            animation: fadeInDown 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         h1 {
-            font-size: 5rem;
-            font-weight: 900;
+            font-size: 5.5rem;
+            font-weight: 800;
             letter-spacing: -2px;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(180deg, #ffffff 0%, #666666 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            opacity: 0;
+            animation: fadeInDown 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
         }
 
-        p.subtitle {
-            font-size: 1.3rem;
-            color: #888;
-            margin-bottom: 3.5rem;
-            font-weight: 400;
+        .subtitle {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 4rem;
+            min-height: 1.5em; /* Prevent layout shift during typing */
         }
 
-        .btn {
+        /* Cursor for typing effect */
+        .cursor {
             display: inline-block;
-            background: rgba(255, 255, 255, 0.05);
+            width: 8px;
+            height: 1.2em;
+            background-color: var(--text-muted);
+            vertical-align: middle;
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink { 50% { opacity: 0; } }
+        
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Button */
+        .btn {
+            position: relative;
+            background: var(--panel-bg);
             color: white;
             text-decoration: none;
-            padding: 1.2rem 3rem;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 1.1rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
+            padding: 1rem 3.5rem;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 1rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            backdrop-filter: blur(12px);
+            overflow: hidden;
+            opacity: 0;
+            animation: fadeInDown 1s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: all 0.6s ease;
         }
 
         .btn:hover {
-            background: white;
-            color: black;
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
 
+        .btn:hover::before { left: 100%; }
+
+        /* Grid Cards 3D */
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin-top: 6rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
             width: 100%;
+            margin-top: 8rem;
+            perspective: 1000px; /* Required for 3D effect */
+            opacity: 0;
+            animation: fadeInDown 1s cubic-bezier(0.16, 1, 0.3, 1) 0.8s forwards;
         }
 
-        /* Glassmorphism Cards */
         .card {
-            background: rgba(20, 20, 20, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 2.5rem 2rem;
-            border-radius: 12px;
-            text-align: left;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            padding: 2.5rem;
+            border-radius: 8px;
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            transition: transform 0.3s ease, border-color 0.3s ease;
+            transform-style: preserve-3d;
+            transition: border-color 0.4s ease, box-shadow 0.4s ease;
+            cursor: pointer;
+            position: relative;
         }
 
         .card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(90, 40, 220, 0.4);
+            border-color: rgba(255, 51, 51, 0.4);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 51, 51, 0.05);
+        }
+
+        /* Elements inside the card pop out in 3D */
+        .card-content {
+            transform: translateZ(30px); /* Pushes content towards the user */
+            pointer-events: none;
+        }
+
+        .card-icon {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--accent-red);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
         }
 
         .card h3 { 
-            font-size: 1.2rem; 
-            margin-bottom: 1rem; 
-            color: #eeeeee;
+            font-size: 1.25rem; 
+            margin-bottom: 0.8rem; 
+            color: #fff;
         }
 
         .card p { 
-            color: #777777; 
+            color: var(--text-muted); 
             font-size: 0.95rem; 
             line-height: 1.6; 
         }
 
         footer {
-            padding: 2.5rem;
-            color: #444;
+            width: 100%;
+            padding: 2rem;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
             font-family: 'JetBrains Mono', monospace;
             font-size: 0.85rem;
-            text-align: center;
-            width: 100%;
-            border-top: 1px solid rgba(255, 255, 255, 0.03);
+            color: #555;
+            background: rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
         }
 
-        footer span { 
-            color: #888; 
-            font-weight: bold;
-        }
+        footer span { color: #aaa; }
     </style>
 </head>
 <body>
+
+    <div class="bg-grid"></div>
+    <div class="glow"></div>
+
     <div class="container">
         <div class="badge">ALPHA</div>
         <h1>SEVEN</h1>
-        <p class="subtitle">Upcoming wonderful executor.</p>
         
-        <!-- Lien Discord Injecté ici -->
+        <div class="subtitle-container">
+            <span class="subtitle" id="typewriter"></span><span class="cursor"></span>
+        </div>
+        
         <a href="https://discord.gg/dYAnYbvqgt" class="btn" target="_blank">Join Discord</a>
 
         <div class="grid">
-            <div class="card">
-                <h3>Level 8 Execution</h3>
-                <p>Engineered from the ground up to bypass modern restrictions silently. Pure execution power.</p>
+            <div class="card" data-tilt>
+                <div class="card-content">
+                    <div class="card-icon">01</div>
+                    <h3>Execution Engine</h3>
+                    <p>Designed to handle complex scripts effortlessly. Seamless integration directly into the UI.</p>
+                </div>
             </div>
-            <div class="card">
-                <h3>Immersive UI</h3>
-                <p>A flawless glassmorphism interface. Designed to be clean, intuitive, and visually stunning.</p>
+            <div class="card" data-tilt>
+                <div class="card-content">
+                    <div class="card-icon">02</div>
+                    <h3>Glassmorphism UI</h3>
+                    <p>A sleek, interactive environment with dynamic tabs, syntax highlighting, and fluid animations.</p>
+                </div>
             </div>
-            <div class="card">
-                <h3>Private Testing</h3>
-                <p>Currently restricted to Alpha testers. Join the community to track development updates.</p>
+            <div class="card" data-tilt>
+                <div class="card-content">
+                    <div class="card-icon">03</div>
+                    <h3>Script Hub</h3>
+                    <p>Access our cloud database. Load scripts instantly via the interface without any drops in performance.</p>
+                </div>
             </div>
         </div>
     </div>
@@ -167,5 +269,57 @@
     <footer>
         Developed by <span>7seven, Koda et G.C</span>
     </footer>
+
+    <script>
+        // --- 1. Typewriter Effect ---
+        const textToType = "Upcoming wonderful executor.";
+        const typeWriterElement = document.getElementById('typewriter');
+        let i = 0;
+
+        function typeWriter() {
+            if (i < textToType.length) {
+                typeWriterElement.innerHTML += textToType.charAt(i);
+                i++;
+                // Randomize typing speed slightly for realism (between 50ms and 120ms)
+                setTimeout(typeWriter, Math.random() * 70 + 50);
+            }
+        }
+        // Start typing after initial load animations (1.2s delay)
+        setTimeout(typeWriter, 1200);
+
+        // --- 2. 3D Tilt Effect on Cards ---
+        const cards = document.querySelectorAll('.card');
+
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left; // x position within the element
+                const y = e.clientY - rect.top;  // y position within the element
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                // Calculate rotation based on mouse position (max 10 degrees)
+                const rotateX = ((y - centerY) / centerY) * -10;
+                const rotateY = ((x - centerX) / centerX) * 10;
+                
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+                // Slight glare effect tied to mouse movement
+                card.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(255,255,255,0.05) 0%, var(--panel-bg) 60%)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                // Reset card to default state
+                card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+                card.style.background = `var(--panel-bg)`;
+                card.style.transition = `transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1), background 0.5s ease`;
+            });
+
+            card.addEventListener('mouseenter', () => {
+                // Remove transition during movement for absolute fluidity
+                card.style.transition = `none`;
+            });
+        });
+    </script>
 </body>
 </html>
